@@ -1,0 +1,3 @@
+<h1>About Us</h1>
+
+<p>Employees play a vital role in the success of any office. They are responsible for completing daily tasks, maintaining productivity, and ensuring smooth workflow. A good employee is punctual, disciplined, and focused on the goals of the organization. In an office environment, employees work together as a team, support each other, and help create a positive atmosphere. Their dedication, skills, and commitment contribute directly to the growth and progress of the company.</p>

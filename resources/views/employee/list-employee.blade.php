@@ -23,6 +23,9 @@
                 <td>{{ $emp->position }}</td>
                 <td>{{ number_format($emp->salary, 2) }}</td>
                 <td>
+                    <!-- @can('update', $employees)
+                       <a href="{{ route('employees.edit', $emp->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                    @endcan -->
                     <a href="{{ route('employees.edit', $emp->id) }}" class="btn btn-warning btn-sm">Edit</a>
                     <form action="{{ route('employees.destroy', $emp->id) }}" method="POST">
                         @csrf

@@ -7,9 +7,17 @@ use App\Models\Employee;
 
 class EmployeeController extends Controller
 {
+    // public function __construct()
+    //     {
+    //         $this->middleware('auth');
+    //     }
+
     public function dashboard()
     {
       //  echo "hii";
+    //   if (auth()->user()->role !== 'admin') {
+    //         abort(403, 'Unauthorized action.');
+    //     }
         $TotalEmployees = Employee::count();
         return view('dashboard', compact('TotalEmployees'));
     }
@@ -21,11 +29,18 @@ class EmployeeController extends Controller
     }
 
     public function add(){ 
+           // Only admin can add
+        if (auth()->user()->role !== 'admin') {
+            abort(403, 'Unauthorized action.');
+        }
         return view('employee.add-employee'); 
     }
 
     public function store(Request $request){
-    // dd($request->all());exit;
+
+        if (auth()->user()->role !== 'admin') {
+            abort(403, 'Unauthorized action.');
+        }
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:employees,email',
@@ -33,31 +48,71 @@ class EmployeeController extends Controller
             'salary' => 'required|numeric|min:0',
         ]);
 
-        Employee::create($request->all());
-        return redirect()->route('list-employee')->with('success', 'Employee added successfully!');
+        // Employee::create($request->all());
+         Employee::create([
+        'name' => strip_tags($request->name),
+        'email' => $request->email,
+        'position' => strip_tags($request->position),
+        'salary' => $request->salary,
+    ]);
+
+    return redirect()->route('list-employee')
+                     ->with('success', 'Employee added successfully!');
+        
     }
 
     public function edit($id){
-        $employee = Employee::findOrFail($id);
-        return view('employee.add-employee', compact('employee'));
+         if (auth()->user()->role !== 'admin') {
+            abort(403, 'Unauthorized action.');
+        }
+        $employees = Employee::findOrFail($id);
+        return view('employee.add-employee', compact('employees'));
     }
 
-    public function update(Request $request, $id){
-        $employee = Employee::findOrFail($id);
+    public function update(Request $request, $id)
+    {
+        //  $this->authorize('update', $employee);
+
+         if (auth()->user()->role !== 'admin') {
+                abort(403, 'Unauthorized action.');
+            }
+        $employees = Employee::findOrFail($id);
 
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:employees,email,' . $employee->id,
+            'email' => 'required|email|unique:employees,email,' . $employees->id,
             'position' => 'required|string|max:255',
             'salary' => 'required|numeric|min:0',
         ]);
+        // $employee->update($request->all());
+        $employees->update([
+            'name' => strip_tags($request->name),
+            'email' => $request->email,
+            'position' => strip_tags($request->position),
+            'salary' => $request->salary,
+        ]);
 
-        $employee->update($request->all());
-        return redirect()->route('list-employee')->with('success', 'Employee updated successfully!');
+        return redirect()->route('list-employee')
+                        ->with('success', 'Employee updated successfully!');
     }
 
-    public function destroy($id){
-        Employee::destroy($id);
-        return redirect()->route('list-employee')->with('success', 'Employee deleted successfully!');
+//    public function destroy($id){
+//         Employee::destroy($id);
+//         return redirect()->route('list-employee')->with('success', 'Employee deleted successfully!');
+//     }
+
+    public function destroy($id)
+    {
+        // $this->authorize('delete', $employee);
+        if (auth()->user()->role !== 'admin') {
+            abort(403, 'Unauthorized action.');
+        }
+        $employee = Employee::findOrFail($id);
+        $employee->delete();
+        return redirect()->route('list-employee')
+                        ->with('success', 'Employee deleted successfully!');
     }
+
 }
+        
+ 

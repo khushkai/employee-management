@@ -30,17 +30,19 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
-        // dd($request->all());exit;
+            // dd($request->all());exit;
         $request->validate([
-            'name'=>'required',
-            'email'=>'required|email',
-            'password'=>'required|confirmed|min:6'
+            'name' => 'required',
+            'email' => 'required|email|unique:users,email',
+            'password'=> 'required|confirmed|min:6'
+        ], [
+            'email.unique' => 'This email is already registered.',
         ]);
 
         $user = User::create([
-            'name'=>$request->name,
-            'email'=>$request->email,
-            'password'=>bcrypt($request->password)
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($request->password)
         ]);
 
         Auth::login($user);

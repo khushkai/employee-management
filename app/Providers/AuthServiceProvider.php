@@ -12,7 +12,12 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
+        Employee::class => EmployeePolicy::class,
         // 'App\Models\Model' => 'App\Policies\ModelPolicy',
+     
+    Crud::class => CrudPolicy::class,
+
+
     ];
 
     /**

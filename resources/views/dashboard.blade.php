@@ -2,7 +2,9 @@
 
 @section('content')
 <div style="max-width: 600px; margin: 50px auto; text-align: center; font-family: Arial, sans-serif;">
+ 
     
+    <br><br>
     <div style="padding: 30px; background-color: #ffffffff; border-radius: 10px; box-shadow: 0 4px 10px rgba(255, 255, 255, 0.1); margin-bottom: 20px;">
         <h2 style="margin-bottom: 10px; color: #333;"> </h2>
         <p style="font-size: 20px; font-weight: bold;">Total Employees: {{ $TotalEmployees }}</p>
@@ -13,5 +15,6 @@
         Go to Employee List
     </a>
 
+    
 </div>
 @endsection
